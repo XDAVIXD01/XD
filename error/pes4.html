@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mensaje final</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    #luciCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .mensaje-final {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      top: 25%;
+      padding: 0 20px;
+      font-size: 1.5rem;
+      text-shadow: 0 0 8px #fff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="luciCanvas"></canvas>
+<div class="mensaje-final">
+  <p>Te extraño mucho, no hay día que no piense en ti</p>
+  <p>Todo me recuerda a ti</p>
+  <p>Espero que con el tiempo podamos encontrar la manera de volver a empezar</p>
+  <p>Lo que sentí contigo fue muy especial</p>
+  <img src="imagenes/polar.png" alt="" style="margin-top: 20px; max-width: 80%; height: auto;">
+</div>
+
+
+  <script>
+    const canvas = document.getElementById('luciCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const luciernagas = Array.from({ length: 100 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 1,
+      dx: (Math.random() - 0.5) * 0.5,
+      dy: (Math.random() - 0.5) * 0.5,
+      opacity: Math.random()
+    }));
+
+    function animar() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      luciernagas.forEach(f => {
+        f.x += f.dx;
+        f.y += f.dy;
+        if (f.x < 0 || f.x > canvas.width) f.dx *= -1;
+        if (f.y < 0 || f.y > canvas.height) f.dy *= -1;
+        f.opacity += (Math.random() - 0.5) * 0.05;
+        f.opacity = Math.max(0.2, Math.min(1, f.opacity));
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 180, ${f.opacity})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(animar);
+    }
+
+    animar();
+  </script>
+</body>
+</html>
