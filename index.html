@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Ti</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('imagenes/campo-verde.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .gerbera {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      opacity: 0;
+      transform: scale(0) rotate(0deg);
+      animation: bloom 2s forwards, sway 4s infinite ease-in-out, rotateSlow 20s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes bloom {
+      to { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: scale(1) rotate(-1deg); }
+      50% { transform: scale(1.05) rotate(1deg); }
+    }
+
+    @keyframes rotateSlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .mensaje {
+      position: absolute;
+      top: 30%;
+      width: 100%;
+      text-align: center;
+      z-index: 2;
+      color: #4a2e00;
+      font-size: 2rem;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+      opacity: 0;
+      animation: aparecer 4s ease-in-out 4s forwards;
+    }
+
+    @keyframes aparecer {
+      to { opacity: 1; }
+    }
+
+    .boton {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #6a206a;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 3;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      transition: background 0.3s;
+    }
+
+    .boton:hover {
+      background: #8b3590;
+    }
+
+    .boton-noche {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #222;
+      color: #fff;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      z-index: 4;
+      box-shadow: 0 0 8px rgba(255,255,255,0.3);
+      transition: background 0.3s;
+    }
+
+    .boton-noche:hover {
+      background: #444;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Botón noche arriba a la derecha -->
+  <button class="boton-noche" onclick="window.location.href='noche.html'">Noche</button>
+
+  <div class="mensaje">Esto es para ti, por los días que me hacías sonreír...<br>y por si hoy, yo logro sacarte una sonrisa a ti.</div>
+  <button class="boton" onclick="reflorecer()">🌸 Volver a florecer</button>
+
+  <audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mp3">
+    Tu navegador no soporta audio.
+  </audio>
+
+  <script>
+    function crearGerbera() {
+      const flor = document.createElement('img');
+      flor.className = 'gerbera';
+
+      const imagenes = [
+        'imagenes/gerbera1.png',
+        'imagenes/gerbera2.png',
+        'imagenes/gerbera3.png',
+        'imagenes/gerbera4.png',
+        'imagenes/gerbera5.png',
+        'imagenes/gerbera6.png'
+      ];
+
+      const seleccion = imagenes[Math.floor(Math.random() * imagenes.length)];
+      flor.src = seleccion;
+
+      flor.style.left = `${Math.random() * window.innerWidth}px`;
+      flor.style.top = `${Math.random() * window.innerHeight}px`;
+      document.body.appendChild(flor);
+    }
+
+    function florecerCampo() {
+      let total = 0;
+      let intervalo = setInterval(() => {
+        crearGerbera();
+        total++;
+        if (total >= 50) clearInterval(intervalo);
+      }, 200);
+    }
+
+    function reflorecer() {
+      const flores = document.querySelectorAll('.gerbera');
+      flores.forEach(f => f.remove());
+      florecerCampo();
+    }
+
+    florecerCampo();
+  </script>
+</body>
+</html>

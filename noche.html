@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Ti</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .gerbera {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      opacity: 0;
+      transform: scale(0) rotate(0deg);
+      animation: bloom 2s forwards, sway 4s infinite ease-in-out, rotateSlow 20s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes bloom {
+      to { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: scale(1) rotate(-1deg); }
+      50% { transform: scale(1.05) rotate(1deg); }
+    }
+
+    @keyframes rotateSlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .mensaje {
+      position: absolute;
+      top: 30%;
+      width: 100%;
+      text-align: center;
+      z-index: 2;
+      color: #fff;
+      font-size: 2rem;
+      text-shadow: 0 0 10px #fff;
+      opacity: 0;
+      animation: aparecer 4s ease-in-out 4s forwards;
+    }
+
+    @keyframes aparecer {
+      to { opacity: 1; }
+    }
+
+    .boton {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #6a206a;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 3;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      transition: background 0.3s;
+    }
+
+    .boton:hover {
+      background: #8b3590;
+    }
+
+    .boton-no-tocar {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: #911;
+      color: white;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      z-index: 4;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+
+    .boton-no-tocar:hover {
+      background: #b12222;
+    }
+
+    .boton-dia {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ccc;
+      color: #222;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      z-index: 5;
+      box-shadow: 0 0 8px rgba(255,255,255,0.3);
+      transition: background 0.3s;
+    }
+
+    .boton-dia:hover {
+      background: #eee;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Botón "Día" en la parte superior derecha -->
+  <button class="boton-dia" onclick="window.location.href='index.html'">Día</button>
+
+  <canvas id="stars"></canvas>
+  <div class="mensaje">Aún en la noche más oscura... tus recuerdos siguen encendidos en mi memoria, como un proceso que el sistema nunca quiso cerrar.</div>
+  <button class="boton" onclick="reflorecer()">🌸 Volver a florecer</button>
+  <button class="boton-no-tocar" onclick="location.href='error/pes1.html'">No tocar</button>
+
+  <audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mp3">
+    Tu navegador no soporta audio.
+  </audio>
+
+  <script>
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let stars = [];
+    for (let i = 0; i < 150; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5,
+        opacity: Math.random(),
+        speed: Math.random() * 0.5 + 0.2
+      });
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let star of stars) {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+        ctx.fill();
+        star.opacity += (Math.random() - 0.5) * 0.05;
+        star.opacity = Math.max(0.1, Math.min(1, star.opacity));
+      }
+      requestAnimationFrame(animateStars);
+    }
+    animateStars();
+
+    function crearGerbera() {
+      const flor = document.createElement('img');
+      flor.className = 'gerbera';
+      flor.src = 'imagenes/gerbera.png';
+      flor.style.left = `${Math.random() * window.innerWidth}px`;
+      flor.style.top = `${Math.random() * window.innerHeight}px`;
+      document.body.appendChild(flor);
+    }
+
+    function florecerCampo() {
+      let total = 0;
+      let intervalo = setInterval(() => {
+        crearGerbera();
+        total++;
+        if (total >= 50) clearInterval(intervalo);
+      }, 200);
+    }
+
+    function reflorecer() {
+      const flores = document.querySelectorAll('.gerbera');
+      flores.forEach(f => f.remove());
+      florecerCampo();
+    }
+
+    florecerCampo();
+  </script>
+</body>
+</html>
